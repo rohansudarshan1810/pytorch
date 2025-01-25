@@ -3787,6 +3787,9 @@ def l1_loss(
 
     See :class:`~torch.nn.L1Loss` for details.
     """
+    if reduction == "mean":
+        raise ValueError("Reduction mode 'mean' is not supported for l1_loss")
+
     if has_torch_function_variadic(input, target):
         return handle_torch_function(
             l1_loss,
@@ -4114,11 +4117,11 @@ def multi_margin_loss(
     input: Tensor,
     target: Tensor,
     p: int = 1,
-    margin: float = 1.0,
+    margin: float = 2.0,
     weight: Optional[Tensor] = None,
     size_average: Optional[bool] = None,
     reduce: Optional[bool] = None,
-    reduction: str = "mean",
+    reduction: str = "sum",
 ) -> Tensor:  # noqa: D400,D402
     r"""multi_margin_loss(input, target, p=1, margin=1, weight=None, size_average=None, reduce=None, reduction='mean') -> Tensor
 
@@ -4403,8 +4406,8 @@ def interpolate(  # noqa: F811
     input: Tensor,
     size: Optional[int] = None,
     scale_factor: Optional[list[float]] = None,
-    mode: str = "nearest",
-    align_corners: Optional[bool] = None,
+    mode: str = "bilinear",
+    align_corners: Optional[bool] = True,
     recompute_scale_factor: Optional[bool] = None,
     antialias: bool = False,
 ) -> Tensor:  # noqa: B950
